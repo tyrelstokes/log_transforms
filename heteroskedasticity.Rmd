@@ -7,11 +7,19 @@ output: html_document
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
+knitr::opts_chunk$set(echo = TRUE,warning=FALSE, cache =TRUE)
 ```
 
 
 ### Heteroskedasticity 
+
+It is sometimes suggested that one take the log-transform of outcomes which display evidence of heteroskedasticity. I wrote these simulations some time in 2019 for a lab presentation where I was trying to illustrate the consequences of doing so when the true outcome is linear. About a year later, I saw a tweet by Rachel Meager (@economeager) which summed up what I wantedto say much better than I ever could have.
+
+"Also remember if you are someonewho cares about bias in your estimator that you can be unbiased for the logmean or for the raw mean but not both" 
+
+See the tweet [here](https://twitter.com/economeager/status/1319250445123096576?s=20&t=fNsM24903WtwwsmkzId8vA).
+
+So here I start with unbiased (but inefficient) estimation on the raw mean and we see the bias when we incorrectly use the log transform. Of course, we could do this in the other direction as well.
 
 ```{r, include =TRUE}
 require(mvtnorm)
@@ -86,11 +94,7 @@ ggplot(data = df3,aes(x=Xhat,y=df3[,1])) + geom_point() + geom_smooth(method="lm
 coefs
 ```
 
-
-
-
-
-Suppose we used a log transformation
+Here we have classical proportional heteroskedasticity. Now suppose we used a log transformation
 
 ```{r,eval=T}
 mod2 <- lm(log(Y) ~ .,data=df3)
@@ -216,7 +220,7 @@ aggregate(gg$mfx, by =list(gg$var,gg$type), mean, na.rm=TRUE)
 
 
 
-```{r, include=T,eval=T}
+```{r, include=T,eval=F}
 
 require(lmtest)
 require(sandwich)
